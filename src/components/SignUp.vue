@@ -1,10 +1,23 @@
 <script setup lang="ts">
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { db } from '@/main';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, where, query } from 'firebase/firestore';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 async function addUserData(userData: any) {
     try {
-        const docRef = await addDoc(collection(db, 'users'), userData);
+        // Check if a user with the same email already exists
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('email', '==', userData.email));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            console.log('User with this email already exists.');
+            return;
+        }
+
+        // Add new user if email does not exist
+        const docRef = await addDoc(usersRef, userData);
         console.log('Document written with ID: ', docRef.id);
     } catch (e) {
         console.error('Error adding document: ', e);
@@ -19,9 +32,11 @@ const signInWithGoogle = () => {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
+            createTime: new Date(),
         };
         addUserData(userData);
         console.log('User signed in successfully:', user);
+        router.push('/member');
     }).catch((error) => {
         console.error('Error signing in with Google:', error);
     });
