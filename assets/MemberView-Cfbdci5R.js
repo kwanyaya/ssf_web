@@ -1,0 +1,1 @@
+import{_ as n,d as r,c as s,a as t,o as _}from"./index-DJkSQhtt.js";const a={};function o(e,c){return" sign up successfully "}const m=n(a,[["render",o]]),p=r({__name:"MemberView",setup(e){return(c,u)=>(_(),s("main",null,[t(m)]))}});export{p as default};
