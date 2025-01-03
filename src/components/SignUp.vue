@@ -56,4 +56,8 @@ const signInWithGoogle = () => {
     border-radius: 50%;
     width: 30%;
 }
+.btn {
+    background-color: var(--theme-color);
+    color: white;
+}
 </style>
